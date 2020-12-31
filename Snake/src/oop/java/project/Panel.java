@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -177,14 +178,19 @@ public class Panel extends JPanel implements ActionListener{
 				g.setColor(NEON_GREEN);
 				g.drawString(" S N A K E ", (Commons.getWidth()/2)-4*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
 				g.setFont(new Font("TimesRoman",Font.BOLD, 20));
-				g.drawString("by Lucas & Samuel Abraha",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
+			//	g.drawString("Made by ...",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
 				g.setColor(Color.WHITE);
 				g.setFont(new Font("TimesRoman",Font.BOLD, 30));
 				g.drawString("PRESS SPACE TO START",(Commons.getWidth()/2)-9*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*4);
+				
 					
 			}
 			
 			if(isMenu()) {
+				
+				/**
+				 * enable singleplayer and multiplayer in a menu
+				 */
 				this.add(sp_button);
 				this.add(spButton());
 				
@@ -275,9 +281,14 @@ public class Panel extends JPanel implements ActionListener{
 				}
         }
 	}
+		else
+		{
+			
+		}
 
 	
 	}
+	
 	
 	public void check_boundaries() {
 		

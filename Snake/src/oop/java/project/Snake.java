@@ -112,7 +112,6 @@ public class Snake  extends GameObj{
 		setDirection(Direction.RIGHT);
 		Rectangle top=snake.get(0);
 		Rectangle temp=new Rectangle(top.x+Commons.getSize(),top.y,Commons.getSize(),Commons.getSize());
-		//temp.setLocation(top.x+Commons.getSize(),top.y);
 		snake.add(0,temp);
 	}
 
@@ -122,7 +121,6 @@ public class Snake  extends GameObj{
 		setDirection(Direction.LEFT);
 		Rectangle top=snake.get(0);
 		Rectangle temp=new Rectangle(top.x-Commons.getSize(),top.y,Commons.getSize(),Commons.getSize());
-		//temp.setLocation(top.x-Commons.getSize(),top.y);
 		snake.add(0,temp);
 	}
 
@@ -132,7 +130,6 @@ public class Snake  extends GameObj{
 		setDirection(Direction.DOWN);
 		Rectangle top=snake.get(0);
 		Rectangle temp=new Rectangle(top.x,top.y+Commons.getSize(),Commons.getSize(),Commons.getSize());
-		//temp.setLocation(top.x,top.y+Commons.getSize());
 		snake.add(0,temp);
 		
 	}
@@ -143,7 +140,6 @@ public class Snake  extends GameObj{
 		setDirection(Direction.UP);
 		Rectangle top=snake.get(0);
 		Rectangle temp=new Rectangle(top.x,top.y-Commons.getSize(),Commons.getSize(),Commons.getSize());
-		//temp.setLocation(top.x,top.y-Commons.getSize());
 		snake.add(0,temp);
 		
 	}

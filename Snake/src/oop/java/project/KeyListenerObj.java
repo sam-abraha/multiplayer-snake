@@ -5,10 +5,7 @@ package oop.java.project;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-/**
- * @author Samuel & Lucas Abraha
- *
- */
+
 public class KeyListenerObj implements KeyListener{
 	
 	private Panel panel;
