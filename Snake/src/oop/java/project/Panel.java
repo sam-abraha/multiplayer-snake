@@ -45,11 +45,11 @@ public class Panel extends JPanel implements ActionListener{
 		snake_2=(new Snake(Commons.getWidth()/2,(Commons.getHeight()/2)+Commons.getSize()*12));
 		apple=new Apple(Commons.getWidth()/2,Commons.getHeight()/2);
 		
-		sp_button=new JButton();
-		sp_button.setVisible(false);
+		sp_button=new JButton();  
+		sp_button.setVisible(false);  // set Button invisible since its only used in the menu
 		
 		mp_button=new JButton();
-		mp_button.setVisible(false);
+		mp_button.setVisible(false);  // set Button invisible since its only used in the menu
 		
 		this.addKeyListener(new KeyListenerObj(this));  //  panel is now able to visualize our key event
 		this.setFocusable(true);                       // key events will only be dispatched to components with focus
@@ -126,6 +126,7 @@ public class Panel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		repaint();
 		gameplay();
+		collision();
 		check_boundaries();
 		
 	}
@@ -178,7 +179,7 @@ public class Panel extends JPanel implements ActionListener{
 				g.setColor(NEON_GREEN);
 				g.drawString(" S N A K E ", (Commons.getWidth()/2)-4*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
 				g.setFont(new Font("TimesRoman",Font.BOLD, 20));
-			//	g.drawString("Made by ...",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
+				g.drawString("Made by ...",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
 				g.setColor(Color.WHITE);
 				g.setFont(new Font("TimesRoman",Font.BOLD, 30));
 				g.drawString("PRESS SPACE TO START",(Commons.getWidth()/2)-9*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*4);
@@ -283,7 +284,42 @@ public class Panel extends JPanel implements ActionListener{
 	}
 		else
 		{
+			setBackground(Color.BLACK);
+			g.setColor(Color.RED);
+			g.setFont(new Font("TimesRoman",Font.BOLD,50));
+			g.drawString("GAME OVER",150,200);
 			
+			g.setFont(new Font("TimesRoman",Font.BOLD,30));
+			g.setColor(Color.WHITE);
+			g.drawString("P1 Score : " + snake.getScore(), 200, 260);
+			
+			if(getGameState()==2) {
+				
+				g.setFont(new Font("TimesRoman",Font.BOLD,30));
+				g.setColor(Color.WHITE);
+				g.drawString("P2 Score : " + snake_2.getScore(), 200, 300);
+				
+				if(snake.getScore()>snake_2.getScore()) {
+					
+					g.setColor(Color.RED);
+					g.setFont(new Font("TimesRoman",Font.BOLD,50));
+					g.drawString("P1 WON !!!",175, 400);	
+				}
+				
+				if(snake.getScore()==snake_2.getScore()) {
+					
+					g.setColor(Color.RED);
+					g.setFont(new Font("TimesRoman",Font.BOLD,50));
+					g.drawString("TIE GAME !!!",175, 400);	
+				}
+				
+				if(snake.getScore() < snake_2.getScore()) {
+					
+					g.setColor(Color.RED);
+					g.setFont(new Font("TimesRoman",Font.BOLD,50));
+					g.drawString("P2 WON !!!",175, 400);	
+				}
+			}
 		}
 
 	
@@ -331,6 +367,7 @@ public class Panel extends JPanel implements ActionListener{
 	
 	
 	public void gameplay() {
+		
 		if(isEaten()) {
 	     	apple.setRandomPosition();
 		}
@@ -342,6 +379,7 @@ public class Panel extends JPanel implements ActionListener{
 		if(snake_2.getDirection()!=null) {
 			snake_2.move();
 		}
+		
 	}
 	
 	
@@ -368,6 +406,30 @@ public class Panel extends JPanel implements ActionListener{
 		
 		return false;
 		
+	}
+	
+	public boolean collision() {
+		
+		Rectangle head = snake.getSnake().get(0);
+		Rectangle head_2=snake_2.getSnake().get(0);
+		
+		
+		
+		for(int i=1;i<=snake.getSnake().size()-1;i++) {
+			if(head.x==snake.getSnake().get(i).x && head.y==snake.getSnake().get(i).y) {
+				setGameOver(true);
+				return true;
+			}
+		}
+		
+		for(int i=1;i<=snake_2.getSnake().size()-1;i++) {
+			if(head_2.x==snake_2.getSnake().get(i).x && head_2.y==snake_2.getSnake().get(i).y) {
+				setGameOver(true);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 
