@@ -1,13 +1,14 @@
+
+  
 package oop.java.project;
 
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Scanner;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -134,7 +135,7 @@ public class Panel extends JPanel implements ActionListener{
 	private JButton spButton() {
 		
 		sp_button.setText("SINGLEPLAYER");
-		sp_button.setLocation(Commons.getWidth()/2-9*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*6);
+		sp_button.setLocation(150,250);
 		sp_button.setBackground(Color.WHITE);
 		sp_button.setVisible(true);
 		sp_button.addActionListener(new ActionListener() { // ActionListener object
@@ -150,7 +151,7 @@ public class Panel extends JPanel implements ActionListener{
 	private JButton mpButton() {
 		
 		mp_button.setText("MULTIPLAYER");
-		mp_button.setLocation((Commons.getWidth()/2)+3*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*6);
+		mp_button.setLocation(350,250);
 		mp_button.setBackground(Color.WHITE);
 		mp_button.setVisible(true);
 		mp_button.addActionListener(new ActionListener() { // ActionListener object
@@ -169,19 +170,20 @@ public class Panel extends JPanel implements ActionListener{
 	 *  paint our images onto the panel
 	 */
 	
-	public void paintComponent(java.awt.Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
 		if(!isGameOver()) {
+			
 			if(isStart()) {
 				this.setBackground(Color.BLACK);
-				g.setFont(new Font("TimesRoman",Font.BOLD, 30)); 
+				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
 				g.setColor(NEON_GREEN);
 				g.drawString(" S N A K E ", (Commons.getWidth()/2)-4*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
-				g.setFont(new Font("TimesRoman",Font.BOLD, 20));
-				g.drawString("Made by ...",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
+				g.setFont(new Font("Monaco",Font.BOLD, 20));
+				g.drawString("Made by Sam & Lucas",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
 				g.setColor(Color.WHITE);
-				g.setFont(new Font("TimesRoman",Font.BOLD, 30));
+				g.setFont(new Font("Monaco",Font.BOLD, 30));
 				g.drawString("PRESS SPACE TO START",(Commons.getWidth()/2)-9*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*4);
 				
 					
@@ -189,9 +191,16 @@ public class Panel extends JPanel implements ActionListener{
 			
 			if(isMenu()) {
 				
+				setStart(false);
+				
 				/**
 				 * enable singleplayer and multiplayer in a menu
 				 */
+				
+				g.setColor(Color.RED);
+				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
+				g.drawString("CHOOSE A GAME MODE", 125, 100);
+				
 				this.add(sp_button);
 				this.add(spButton());
 				
@@ -206,8 +215,8 @@ public class Panel extends JPanel implements ActionListener{
 	        	 * set prior game stages false 
 	        	 */
 	        	
-	        	this.setStart(false);
-	        	this.setMenu(false);
+	        	setStart(false);
+	        	setMenu(false);
 	        	
 	        	/**
 	        	 *  set buttons unvisible
@@ -282,48 +291,62 @@ public class Panel extends JPanel implements ActionListener{
 				}
         }
 	}
-		else
+		else // if game is over
 		{
-			setBackground(Color.BLACK);
+            setBackground(Color.BLACK);
+			
 			g.setColor(Color.RED);
-			g.setFont(new Font("TimesRoman",Font.BOLD,50));
+			g.setFont(new Font("Monaco",Font.BOLD,50));
 			g.drawString("GAME OVER",150,200);
 			
-			g.setFont(new Font("TimesRoman",Font.BOLD,30));
-			g.setColor(Color.WHITE);
-			g.drawString("P1 Score : " + snake.getScore(), 200, 260);
+			g.setFont(new Font("Monaco",Font.BOLD,20));
+			g.drawString("PRESS ESC TO CLOSE", 200,500);
 			
-			if(getGameState()==2) {
+			if(getGameState()==1) {
 				
-				g.setFont(new Font("TimesRoman",Font.BOLD,30));
+				g.setFont(new Font("Monaco",Font.BOLD,30));
+				g.setColor(Color.WHITE);
+				g.drawString("Your Score : " + snake.getScore(), 200, 260);
+				
+
+			}
+			 
+			else {
+				
+				g.setFont(new Font("Monaco",Font.BOLD,30));
+				g.setColor(Color.WHITE);
+				g.drawString("P1 Score : " + snake.getScore(), 200, 260);
+				
+				g.setFont(new Font("Monaco",Font.BOLD,30));
 				g.setColor(Color.WHITE);
 				g.drawString("P2 Score : " + snake_2.getScore(), 200, 300);
 				
 				if(snake.getScore()>snake_2.getScore()) {
 					
 					g.setColor(Color.RED);
-					g.setFont(new Font("TimesRoman",Font.BOLD,50));
+					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("P1 WON !!!",175, 400);	
 				}
 				
 				if(snake.getScore()==snake_2.getScore()) {
 					
 					g.setColor(Color.RED);
-					g.setFont(new Font("TimesRoman",Font.BOLD,50));
+					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("TIE GAME !!!",175, 400);	
 				}
 				
 				if(snake.getScore() < snake_2.getScore()) {
 					
 					g.setColor(Color.RED);
-					g.setFont(new Font("TimesRoman",Font.BOLD,50));
+					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("P2 WON !!!",175, 400);	
 				}
 			}
 		}
-
-	
 	}
+		
+	
+
 	
 	
 	public void check_boundaries() {
@@ -431,13 +454,16 @@ public class Panel extends JPanel implements ActionListener{
 		
 		return false;
 	}
-
-
 	
-	
-	}
-
+}
 	
 
 
+
 	
+
+	
+
+
+	
+
