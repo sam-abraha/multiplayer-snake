@@ -436,17 +436,45 @@ public class Panel extends JPanel implements ActionListener{
 		Rectangle head = snake.getSnake().get(0);
 		Rectangle head_2=snake_2.getSnake().get(0);
 		
-		
+		/**
+		 * player 1's snake collison, index starts with 1 beacuse we want to detect colliison between head and body
+		 */
 		
 		for(int i=1;i<=snake.getSnake().size()-1;i++) {
-			if(head.x==snake.getSnake().get(i).x && head.y==snake.getSnake().get(i).y) {
+			if(head_2.x==snake.getSnake().get(i).x && head_2.y==snake.getSnake().get(i).y) {
 				setGameOver(true);
 				return true;
 			}
 		}
 		
+		/**
+		 * player 2's snake self collision
+		 */
+		
 		for(int i=1;i<=snake_2.getSnake().size()-1;i++) {
 			if(head_2.x==snake_2.getSnake().get(i).x && head_2.y==snake_2.getSnake().get(i).y) {
+				setGameOver(true);
+				return true;
+			}
+		}
+		
+		/**
+		 * collison between player 1 and player 2
+		 */
+		
+		for(int i=0;i<snake_2.getSnake().size()-1;i++) {
+			if(head.x==snake_2.getSnake().get(i).x && head.y==snake_2.getSnake().get(i).y ) {
+				setGameOver(true);
+				return true;
+			}
+		}
+		
+		/**
+		 * collsion between player 2 and player 1
+		 */
+		
+		for(int i=0;i<snake.getSnake().size();i++) {
+			if(head_2.x==snake.getSnake().get(i).x && head_2.y==snake.getSnake().get(i).y ) {
 				setGameOver(true);
 				return true;
 			}
