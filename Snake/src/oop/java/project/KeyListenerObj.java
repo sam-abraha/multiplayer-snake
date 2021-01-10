@@ -20,17 +20,16 @@ public class KeyListenerObj implements KeyListener{
 	
 	
 	/**
-	 *  enables key events when in this case arrow keys are pressed
+	 *  enables key events when keys are pressed
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-	    int keyCode = e.getKeyCode();
-	    
-	   
+		
 	    /**
 	     * Each key press is described by a sequence of key events which are accompanied by a key code
 	     */
 	    
+	    int keyCode = e.getKeyCode();
 	    
 	    switch(keyCode) { 
 	    
@@ -75,7 +74,8 @@ public class KeyListenerObj implements KeyListener{
 	        	break;
 	            
 	        case KeyEvent.VK_SPACE :
-	        	panel.setMenu(true);
+	        	if(panel.isStart())
+	        		panel.setMenu(true);
 	        	break;
 	        	
 	        
@@ -83,7 +83,6 @@ public class KeyListenerObj implements KeyListener{
 	        	System.exit(1);
 	        
 	     }
-	    panel.repaint();
 	}
 
 
