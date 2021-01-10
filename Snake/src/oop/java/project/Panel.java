@@ -4,11 +4,14 @@ package oop.java.project;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -25,14 +28,15 @@ public class Panel extends JPanel implements ActionListener{
 	
 	private JButton sp_button;
 	private JButton mp_button;
+	private JButton again_button;
 	
 	private static final Color NEON_GREEN = new Color(102,255,102);
 	private static final Color PURPLE = new Color(106,13,173);
-	
+
 	private boolean isRunning;
 	private boolean menu;
 	private boolean start;
-	private int GameState;
+	private int gameMode;
 	private boolean gameOver;
 
 	private Timer timer;
@@ -40,10 +44,12 @@ public class Panel extends JPanel implements ActionListener{
 	
 	public Panel() {
 		
-		timer=new Timer(75,this);                         // due to the timer images will be repainted every 5 mi.seconds
+		timer=new Timer(75,this); // due to the timer images will be repainted every 5 mi.seconds
 		timer.start();
+		
+		
 		snake=new Snake(Commons.getWidth()/2,(Commons.getHeight()/2)-Commons.getSize()*12);
-		snake_2=(new Snake(Commons.getWidth()/2,(Commons.getHeight()/2)+Commons.getSize()*12));
+		snake_2=new Snake(Commons.getWidth()/2,(Commons.getHeight()/2)+Commons.getSize()*12); // set non existing position in case singleplayer is chosen
 		apple=new Apple(Commons.getWidth()/2,Commons.getHeight()/2);
 		
 		sp_button=new JButton();  
@@ -52,13 +58,17 @@ public class Panel extends JPanel implements ActionListener{
 		mp_button=new JButton();
 		mp_button.setVisible(false);  // set Button invisible since its only used in the menu
 		
+		again_button=new JButton();
+		again_button.setVisible(false); // set Button invisible since its only used when game over
+		
+		
 		this.addKeyListener(new KeyListenerObj(this));  //  panel is now able to visualize our key event
 		this.setFocusable(true);                       // key events will only be dispatched to components with focus
 		this.setSize(WIDTH,HEIGHT);
-		setRunning(false);
-		setGameOver(false);
-		setMenu(false);
-		setStart(true);
+		this.setRunning(false);
+		this.setGameOver(false);
+		this.setMenu(false);
+		this.setStart(true);
 
 	}
 	
@@ -68,14 +78,14 @@ public class Panel extends JPanel implements ActionListener{
 		return snake;
 	}
 	
-	public void setGameState(int x ) {
+	public void setGameMode(int x ) {
 		
 		if(x==1 || x==2)
-			GameState=x;
+			gameMode=x;
 	}
 	
-	public int getGameState() {
-		return GameState;
+	public int getGameMode() {
+		return gameMode;
 	}
 	
 	public boolean isMenu() {
@@ -120,7 +130,37 @@ public class Panel extends JPanel implements ActionListener{
 		this.gameOver = gameOver;
 	}
 
+	private JButton spButton() {
+		
+		sp_button.setText("SINGLEPLAYER");
+		sp_button.setLocation(150,200);
+		sp_button.setBackground(Color.WHITE);
+		sp_button.setPreferredSize(new Dimension(300,100));
+		sp_button.setVisible(true);
+		sp_button.addActionListener(new ActionListener() { // ActionListener object
+			public void actionPerformed(ActionEvent e) { // Action when button pressed
+			setGameMode(1);
+			setRunning(true);
+			}
+		});
+			return sp_button; // returns button
+	}
 	
+	private JButton mpButton() {
+		
+		mp_button.setText("MULTIPLAYER");
+		mp_button.setLocation(150,400);
+		mp_button.setBackground(Color.WHITE);
+		mp_button.setPreferredSize(new Dimension(300,100));
+		mp_button.setVisible(true);
+		mp_button.addActionListener(new ActionListener() { // ActionListener object
+			public void actionPerformed(ActionEvent e) { // Action when button pressed
+			setGameMode(2);
+			setRunning(true);
+			}
+		});
+			return mp_button; // returns button
+	}
 	
 
 	@Override
@@ -132,40 +172,7 @@ public class Panel extends JPanel implements ActionListener{
 		
 	}
 	
-	private JButton spButton() {
-		
-		sp_button.setText("SINGLEPLAYER");
-		sp_button.setLocation(150,250);
-		sp_button.setBackground(Color.WHITE);
-		sp_button.setVisible(true);
-		sp_button.addActionListener(new ActionListener() { // ActionListener object
-			public void actionPerformed(ActionEvent e) { // Action when button pressed
-			setGameState(1);
-			sp_button.setVisible(false);
-			setRunning(true);
-			}
-		});
-			return sp_button; // returns button
-		}
-	
-	private JButton mpButton() {
-		
-		mp_button.setText("MULTIPLAYER");
-		mp_button.setLocation(350,250);
-		mp_button.setBackground(Color.WHITE);
-		mp_button.setVisible(true);
-		mp_button.addActionListener(new ActionListener() { // ActionListener object
-			public void actionPerformed(ActionEvent e) { // Action when button pressed
-			setGameState(2);
-			setMenu(false);
-			setRunning(true);
-			}
-		});
-			return mp_button; // returns button
-		}
-	
-	
-	
+
 	/**
 	 *  paint our images onto the panel
 	 */
@@ -176,7 +183,8 @@ public class Panel extends JPanel implements ActionListener{
 		if(!isGameOver()) {
 			
 			if(isStart()) {
-				this.setBackground(Color.BLACK);
+				
+				setBackground(Color.BLACK);
 				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
 				g.setColor(NEON_GREEN);
 				g.drawString(" S N A K E ", (Commons.getWidth()/2)-4*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
@@ -194,7 +202,7 @@ public class Panel extends JPanel implements ActionListener{
 				setStart(false);
 				
 				/**
-				 * enable singleplayer and multiplayer in a menu
+				 * enable choosing  singleplayer or  multiplayer in a menu
 				 */
 				
 				g.setColor(Color.RED);
@@ -241,7 +249,7 @@ public class Panel extends JPanel implements ActionListener{
 				 *  set 2 different background colors depending on mode
 				 */
 				
-				if(getGameState()==1) {
+				if(getGameMode()==1) {
 					setBackground(NEON_GREEN);
 				}
 				else
@@ -280,7 +288,7 @@ public class Panel extends JPanel implements ActionListener{
 				for(Rectangle rect : snake.getSnake())
 					g2d.fill(rect);
 				
-				if(getGameState()==2) {
+				if(getGameMode()==2) {
 					g2d.setColor(Color.WHITE);
 					for(Rectangle rect : snake_2.getSnake())
 						g2d.fill(rect);
@@ -293,16 +301,22 @@ public class Panel extends JPanel implements ActionListener{
 	}
 		else // if game is over
 		{
+			
             setBackground(Color.BLACK);
+            
+            /**
+             * draw screen when game is over
+             */
 			
 			g.setColor(Color.RED);
 			g.setFont(new Font("Monaco",Font.BOLD,50));
 			g.drawString("GAME OVER",150,200);
+	
 			
 			g.setFont(new Font("Monaco",Font.BOLD,20));
 			g.drawString("PRESS ESC TO CLOSE", 200,500);
 			
-			if(getGameState()==1) {
+			if(getGameMode()==1) {
 				
 				g.setFont(new Font("Monaco",Font.BOLD,30));
 				g.setColor(Color.WHITE);
@@ -320,6 +334,7 @@ public class Panel extends JPanel implements ActionListener{
 				g.setFont(new Font("Monaco",Font.BOLD,30));
 				g.setColor(Color.WHITE);
 				g.drawString("P2 Score : " + snake_2.getScore(), 200, 300);
+				
 				
 				if(snake.getScore()>snake_2.getScore()) {
 					
@@ -340,6 +355,7 @@ public class Panel extends JPanel implements ActionListener{
 					g.setColor(Color.RED);
 					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("P2 WON !!!",175, 400);	
+				
 				}
 			}
 		}
@@ -395,11 +411,11 @@ public class Panel extends JPanel implements ActionListener{
 	     	apple.setRandomPosition();
 		}
 		
-		if(snake.getDirection()!=null) {
+		if(snake.getDirection()!=null && !isGameOver()) {
 			snake.move();
 		}
 		
-		if(snake_2.getDirection()!=null) {
+		if(snake_2.getDirection()!=null && !isGameOver()) {
 			snake_2.move();
 		}
 		
@@ -441,43 +457,50 @@ public class Panel extends JPanel implements ActionListener{
 		 */
 		
 		for(int i=1;i<=snake.getSnake().size()-1;i++) {
-			if(head_2.x==snake.getSnake().get(i).x && head_2.y==snake.getSnake().get(i).y) {
+			if(head.x==snake.getSnake().get(i).x && head.y==snake.getSnake().get(i).y) {
 				setGameOver(true);
 				return true;
 			}
 		}
 		
-		/**
-		 * player 2's snake self collision
-		 */
-		
-		for(int i=1;i<=snake_2.getSnake().size()-1;i++) {
-			if(head_2.x==snake_2.getSnake().get(i).x && head_2.y==snake_2.getSnake().get(i).y) {
-				setGameOver(true);
-				return true;
+		if(getGameMode()==2) {
+			
+			/**
+			 * player 2's snake self collision
+			 */
+			
+			for(int i=1;i<=snake_2.getSnake().size()-1;i++) {
+				if(head_2.x==snake_2.getSnake().get(i).x && head_2.y==snake_2.getSnake().get(i).y) {
+					setGameOver(true);
+					return true;
+				}
 			}
-		}
+			
+			/**
+			 * collison between player 1 and player 2
+			 */
 		
-		/**
-		 * collison between player 1 and player 2
-		 */
-		
-		for(int i=0;i<snake_2.getSnake().size()-1;i++) {
-			if(head.x==snake_2.getSnake().get(i).x && head.y==snake_2.getSnake().get(i).y ) {
-				setGameOver(true);
-				return true;
+			
+			for(int i=0;i<snake_2.getSnake().size()-1;i++) {
+				if(head.x==snake_2.getSnake().get(i).x && head.y==snake_2.getSnake().get(i).y ) {
+					setGameOver(true);
+					return true;
+				}
 			}
-		}
-		
-		/**
-		 * collsion between player 2 and player 1
-		 */
-		
-		for(int i=0;i<snake.getSnake().size();i++) {
-			if(head_2.x==snake.getSnake().get(i).x && head_2.y==snake.getSnake().get(i).y ) {
-				setGameOver(true);
-				return true;
+			
+			/**
+			 * collision between player 2 an player 1
+			 */
+			
+			for(int i=0;i<snake.getSnake().size();i++) {
+				if(head_2.x==snake.getSnake().get(i).x && head_2.y==snake.getSnake().get(i).y ) {
+					setGameOver(true);
+					return true;
+				}
 			}
+			
+			
+
 		}
 		
 		return false;
