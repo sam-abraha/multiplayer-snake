@@ -26,9 +26,13 @@ public class GUI extends JFrame {
 	
 	public static void main(String args[]) {
 	    java.awt.EventQueue.invokeLater(new Runnable() {
-	        public void run() {
-	            new GUI().setVisible(true);
-	        }
+	    	public void run() {
+	    		try {
+	    			new GUI().setVisible(true);
+	    		} catch(Exception e) {
+	    			e.printStackTrace();
+	    		}
+	    	}
 	    });
 	}
 	
