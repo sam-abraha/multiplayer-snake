@@ -3,6 +3,7 @@
 package oop.java.project;
 
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,8 +11,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -184,13 +188,21 @@ public class Panel extends JPanel implements ActionListener{
 			
 			if(isStart()) {
 				
-				setBackground(Color.BLACK);
-				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
-				g.setColor(NEON_GREEN);
-				g.drawString(" S N A K E ", (Commons.getWidth()/2)-4*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
-				g.setFont(new Font("Monaco",Font.BOLD, 20));
-				g.drawString("Made by Sam & Lucas",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
+				try {                
+				    BufferedImage img = ImageIO.read(new File("C:\\Users\\Lucas\\Downloads\\snake_java_img.jpg"));
+				    g.drawImage(img,0,0,this);
+				  } catch (IOException ex) {
+				       // handle exception
+				  	ex.printStackTrace();
+				  }
+
+				
 				g.setColor(Color.WHITE);
+				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
+				g.drawString("SNAKE", (Commons.getWidth()/2)-3*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
+				g.setFont(new Font("Monaco",Font.BOLD, 20));
+				g.drawString("made by lucas & sam",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
+				g.setColor(Color.RED);
 				g.setFont(new Font("Monaco",Font.BOLD, 30));
 				g.drawString("PRESS SPACE TO START",(Commons.getWidth()/2)-9*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*4);
 				
@@ -198,6 +210,15 @@ public class Panel extends JPanel implements ActionListener{
 			}
 			
 			if(isMenu()) {
+				
+				try {                
+				    BufferedImage img = ImageIO.read(new File("C:\\Users\\Lucas\\Downloads\\snake_java_img.jpg"));
+				    g.drawImage(img,0,0,this);
+				  } catch (IOException ex) {
+				       // handle exception
+				  	ex.printStackTrace();
+				  }
+
 				
 				setStart(false);
 				
@@ -293,7 +314,7 @@ public class Panel extends JPanel implements ActionListener{
 					for(Rectangle rect : snake_2.getSnake())
 						g2d.fill(rect);
 					
-					g.setFont(new Font("TimesRoman",Font.BOLD | Font.ITALIC,15));
+					g.setFont(new Font("Monaco",Font.BOLD | Font.ITALIC,15));
 					g.drawString("SCORE :  " + snake_2.getScore(),Commons.getWidth()-Commons.getSize()*5,15);
 					
 				}
@@ -507,14 +528,5 @@ public class Panel extends JPanel implements ActionListener{
 	}
 	
 }
-	
-
-
-
-	
-
-	
-
-
 	
 
