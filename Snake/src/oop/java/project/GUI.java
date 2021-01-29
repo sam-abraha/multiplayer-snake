@@ -1,3 +1,4 @@
+
 package oop.java.project;
 
 
@@ -20,6 +21,7 @@ public class GUI extends JFrame {
 		this.setTitle("Snake");
 		this.setSize(WIDTH, HEIGHT);
 		this.setLocationRelativeTo(null); // center the frame
+		this.setResizable(false);
 		this.add(new Panel()); // add panel to the frame 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -35,12 +37,9 @@ public class GUI extends JFrame {
 	    	}
 	    });
 	}
-	
-	
-	
-
 }
 	
+	     
 
 
 
