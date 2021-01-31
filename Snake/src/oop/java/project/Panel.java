@@ -1,28 +1,50 @@
 
-  
 package oop.java.project;
 
 
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Rectangle;
+import java.awt.Shape;
 
+/**
+ * @author Lucas
+ *
+ */
+/**
+ * @author Lucas
+ *
+ */
+/**
+ * @author Lucas
+ *
+ */
+/**
+ * @author Lucas
+ *
+ */
 public class Panel extends JPanel implements ActionListener{
-	
 	
 	private static final long serialVersionUID = 1L;
 
@@ -32,16 +54,15 @@ public class Panel extends JPanel implements ActionListener{
 	
 	private JButton sp_button;
 	private JButton mp_button;
-	private JButton again_button;
+	private JButton ai_button;
+	private JButton localmp_button;
 	
 	private static final Color NEON_GREEN = new Color(102,255,102);
 	private static final Color PURPLE = new Color(106,13,173);
-
-	private boolean isRunning;
-	private boolean menu;
-	private boolean start;
+	
 	private int gameMode;
-	private boolean gameOver;
+	private GameState gameState;
+	
 
 	private Timer timer;
 
@@ -52,37 +73,49 @@ public class Panel extends JPanel implements ActionListener{
 		timer.start();
 		
 		
-		snake=new Snake(Commons.getWidth()/2,(Commons.getHeight()/2)-Commons.getSize()*12);
-		snake_2=new Snake(Commons.getWidth()/2,(Commons.getHeight()/2)+Commons.getSize()*12); // set non existing position in case singleplayer is chosen
-		apple=new Apple(Commons.getWidth()/2,Commons.getHeight()/2);
+		snake=new Snake(Commons.WIDTH/2,(Commons.HEIGHT/2)-Commons.SIZE*12);
+		snake_2=new Snake(Commons.WIDTH/2,(Commons.HEIGHT/2)+Commons.SIZE*12); // set non existing position in case singleplayer is chosen
+		apple=new Apple(Commons.WIDTH/2,Commons.HEIGHT/2);
+		
+		/*
+		obstacles = new ArrayList<Obstacle>();
+		for(int i=0;i<20;i++) { 
+			obstacles.add(new Obstacle((int)Math.random()/20*20,(int)Math.random()/20*20));
+		}
+		*/
 		
 		sp_button=new JButton();  
 		sp_button.setVisible(false);  // set Button invisible since its only used in the menu
-		
 		mp_button=new JButton();
 		mp_button.setVisible(false);  // set Button invisible since its only used in the menu
+		localmp_button=new JButton();
+		ai_button=new JButton();
 		
-		again_button=new JButton();
-		again_button.setVisible(false); // set Button invisible since its only used when game over
 		
 		
 		this.addKeyListener(new KeyListenerObj(this));  //  panel is now able to visualize our key event
 		this.setFocusable(true);                       // key events will only be dispatched to components with focus
-		this.setSize(WIDTH,HEIGHT);
-		this.setRunning(false);
-		this.setGameOver(false);
-		this.setMenu(false);
-		this.setStart(true);
+		this.setSize(WIDTH,HEIGHT); // sets size of the panel 
+		this.setGameState(GameState.START); // sets game state to start
 
 	}
 	
 	
+	 public GameState getGameState() {
+		return gameState;
+	}
+
+
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
+	}
+
 	public Snake getSnake() {
 		// TODO Auto-generated method stub
 		return snake;
 	}
 	
-	public void setGameMode(int x ) {
+	public void setGameMode(int x) {
 		
 		if(x==1 || x==2)
 			gameMode=x;
@@ -92,22 +125,6 @@ public class Panel extends JPanel implements ActionListener{
 		return gameMode;
 	}
 	
-	public boolean isMenu() {
-		return menu;
-	}
-
-	public void setMenu(boolean menu) {
-		this.menu = menu;
-	}
-	
-	public boolean isStart() {
-		return start;
-	}
-
-
-	public void setStart(boolean start) {
-		this.start = start;
-	}
 
 	public Snake getSnake_2() {
 		return snake_2;
@@ -117,34 +134,18 @@ public class Panel extends JPanel implements ActionListener{
 		this.snake_2 = snake_2;
 	}
 	
-	public boolean isRunning() {
-		return isRunning;
-	}
-
-	public void setRunning(boolean isRunning) {
-		this.isRunning = isRunning;
-	}
 	
-	public boolean isGameOver() {
-		return gameOver;
-	}
-
-
-	public void setGameOver(boolean gameOver) {
-		this.gameOver = gameOver;
-	}
-
 	private JButton spButton() {
 		
 		sp_button.setText("SINGLEPLAYER");
 		sp_button.setLocation(150,200);
 		sp_button.setBackground(Color.WHITE);
-		sp_button.setPreferredSize(new Dimension(300,100));
+		sp_button.setPreferredSize(new Dimension(300,50));
 		sp_button.setVisible(true);
 		sp_button.addActionListener(new ActionListener() { // ActionListener object
 			public void actionPerformed(ActionEvent e) { // Action when button pressed
 			setGameMode(1);
-			setRunning(true);
+			setGameState(GameState.RUNNING);
 			}
 		});
 			return sp_button; // returns button
@@ -153,20 +154,20 @@ public class Panel extends JPanel implements ActionListener{
 	private JButton mpButton() {
 		
 		mp_button.setText("MULTIPLAYER");
-		mp_button.setLocation(150,400);
+		mp_button.setLocation(150,300);
 		mp_button.setBackground(Color.WHITE);
-		mp_button.setPreferredSize(new Dimension(300,100));
+		mp_button.setPreferredSize(new Dimension(300,50));
 		mp_button.setVisible(true);
 		mp_button.addActionListener(new ActionListener() { // ActionListener object
 			public void actionPerformed(ActionEvent e) { // Action when button pressed
-			setGameMode(2);
-			setRunning(true);
+				setGameMode(2);
+				setGameState(GameState.RUNNING);
 			}
 		});
 			return mp_button; // returns button
 	}
 	
-
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		repaint();
@@ -184,15 +185,15 @@ public class Panel extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		if(!isGameOver()) {
+		if(getGameState()!=GameState.GAMEOVER) {
 			
-			if(isStart()) {
+			if(getGameState()==GameState.START) {
 				
 				try {                
 				    BufferedImage img = ImageIO.read(new File("C:\\Users\\Lucas\\Downloads\\snake_java_img.jpg"));
 				    g.drawImage(img,0,0,this);
 				  } catch (IOException ex) {
-				       // handle exception
+				    //handle exception
 				  	ex.printStackTrace();
 				  }
 
@@ -209,7 +210,7 @@ public class Panel extends JPanel implements ActionListener{
 					
 			}
 			
-			if(isMenu()) {
+			if(getGameState()==GameState.MENU) {
 				
 				try {                
 				    BufferedImage img = ImageIO.read(new File("C:\\Users\\Lucas\\Downloads\\snake_java_img.jpg"));
@@ -220,7 +221,6 @@ public class Panel extends JPanel implements ActionListener{
 				  }
 
 				
-				setStart(false);
 				
 				/**
 				 * enable choosing  singleplayer or  multiplayer in a menu
@@ -230,40 +230,28 @@ public class Panel extends JPanel implements ActionListener{
 				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
 				g.drawString("CHOOSE A GAME MODE", 125, 100);
 				
-				this.add(sp_button);
+				this.add(sp_button);  // add singleplayer button
 				this.add(spButton());
 				
-				this.add(mp_button);
+				this.add(mp_button);  // add multiplayer button
 				this.add(mpButton());
-				
 			}
+	
 				
-	        if(isRunning()) {
+	        if(getGameState()==GameState.RUNNING) {
 	        	
+	     
 	        	/**
-	        	 * set prior game stages false 
+	        	 *  remove buttons
 	        	 */
 	        	
-	        	setStart(false);
-	        	setMenu(false);
+	        	this.remove(sp_button);
+	        	this.remove(mp_button);
 	        	
-	        	/**
-	        	 *  set buttons unvisible
-	        	 */
-	        	
-	        	sp_button.setVisible(false);
-	        	mp_button.setVisible(false);
-	        	
+				
 				/**
-				 * score is visible in the top left corner
+				 * cast to 2D Graphics to draw 2D objects
 				 */
-	        	
-	        	
-				g.setColor(Color.black);
-				g.setFont(new Font("TimesRoman",Font.BOLD | Font.ITALIC,15));
-				g.drawString("SCORE :  " + snake.getScore(),25,15);
-				
-				
 				Graphics2D g2d=(Graphics2D)g;
 				
 				/**
@@ -283,7 +271,7 @@ public class Panel extends JPanel implements ActionListener{
 				 *  a grid-like field will be created
 				 */
 				
-				g.setColor(Color.white);
+				g.setColor(Color.WHITE);
 				for(int i=0;i<=(Commons.getWidth()/Commons.getSize());i++) {
 					g.drawLine(0, i*Commons.getSize(), Commons.getWidth(), i*Commons.getSize());
 				}
@@ -302,12 +290,17 @@ public class Panel extends JPanel implements ActionListener{
 				
 				
 				/**
-				 *  draw the second player and his score board
+				 *  draws both snakes and their score board
 				 */
 				
 				g2d.setColor(Color.BLACK);
 				for(Rectangle rect : snake.getSnake())
 					g2d.fill(rect);
+				
+				g.setColor(Color.black);
+				g.setFont(new Font("TimesRoman",Font.BOLD | Font.ITALIC,15));
+				g.drawString("SCORE :  " + snake.getScore(),25,15);
+				
 				
 				if(getGameMode()==2) {
 					g2d.setColor(Color.WHITE);
@@ -318,9 +311,15 @@ public class Panel extends JPanel implements ActionListener{
 					g.drawString("SCORE :  " + snake_2.getScore(),Commons.getWidth()-Commons.getSize()*5,15);
 					
 				}
+				
+				/**
+				 * calls rainbow method
+				 */
+				rainbow(g2d);
+					
         }
 	}
-		else // if game is over
+		if(getGameState()==GameState.GAMEOVER)
 		{
 			
             setBackground(Color.BLACK);
@@ -352,40 +351,67 @@ public class Panel extends JPanel implements ActionListener{
 				g.setColor(Color.WHITE);
 				g.drawString("P1 Score : " + snake.getScore(), 200, 260);
 				
-				g.setFont(new Font("Monaco",Font.BOLD,30));
 				g.setColor(Color.WHITE);
 				g.drawString("P2 Score : " + snake_2.getScore(), 200, 300);
 				
+				g.setColor(Color.RED);
+				g.setFont(new Font("Monaco",Font.BOLD,50));
 				
 				if(snake.getScore()>snake_2.getScore()) {
 					
-					g.setColor(Color.RED);
-					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("P1 WON !!!",175, 400);	
 				}
 				
 				if(snake.getScore()==snake_2.getScore()) {
 					
-					g.setColor(Color.RED);
-					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("TIE GAME !!!",175, 400);	
 				}
 				
 				if(snake.getScore() < snake_2.getScore()) {
 					
-					g.setColor(Color.RED);
-					g.setFont(new Font("Monaco",Font.BOLD,50));
 					g.drawString("P2 WON !!!",175, 400);	
 				
 				}
 			}
 		}
 	}
+	
+	/**
+	 * draws the snake in rainbow colors
+	 * @param g
+	 */
+	
+	public void rainbow(Graphics g2d)  {
 		
-	
-
-	
-	
+		if(snake.getScore() > 5) {
+			 for (int i=0;i<snake.getSnake().size();i++) {
+				  Random rand = new Random();
+				  final float hue =rand.nextFloat();
+				  final float saturation = 0.9f;
+				  final float luminance=1.0f;
+				  Color color=Color.getHSBColor(hue, saturation, luminance);
+				  g2d.setColor(color);
+				  ((Graphics2D) g2d).fill(snake.getSnake().get(i));
+			   }
+		}
+		
+		if(snake_2.getScore() > 5) {
+			 for (int i=0;i<snake_2.getSnake().size();i++) {
+				  Random rand = new Random();
+				  final float hue =rand.nextFloat();
+				  final float saturation = 0.9f;
+				  final float luminance=1.0f;
+				  Color color=Color.getHSBColor(hue, saturation, luminance);
+				  g2d.setColor(color);
+				  ((Graphics2D) g2d).fill(snake_2.getSnake().get(i));
+			   }
+		}
+			 		 
+	}
+		
+	/**
+	 * sets snakes to the opposite position if boundaries crossed
+	 */
 	public void check_boundaries() {
 		
 		if(snake.getSnake().get(0).x < 0) {
@@ -432,11 +458,11 @@ public class Panel extends JPanel implements ActionListener{
 	     	apple.setRandomPosition();
 		}
 		
-		if(snake.getDirection()!=null && !isGameOver()) {
+		if(snake.getDirection() != Direction.NOT_MOVING && getGameState()!=GameState.GAMEOVER) {
 			snake.move();
 		}
 		
-		if(snake_2.getDirection()!=null && !isGameOver()) {
+		if(snake_2.getDirection() != Direction.NOT_MOVING && getGameState()!=GameState.GAMEOVER) {
 			snake_2.move();
 		}
 		
@@ -468,6 +494,9 @@ public class Panel extends JPanel implements ActionListener{
 		
 	}
 	
+	/**
+	 * @return true if a collision took place
+	 */
 	public boolean collision() {
 		
 		Rectangle head = snake.getSnake().get(0);
@@ -479,7 +508,7 @@ public class Panel extends JPanel implements ActionListener{
 		
 		for(int i=1;i<=snake.getSnake().size()-1;i++) {
 			if(head.x==snake.getSnake().get(i).x && head.y==snake.getSnake().get(i).y) {
-				setGameOver(true);
+				setGameState(GameState.GAMEOVER);
 				return true;
 			}
 		}
@@ -492,30 +521,30 @@ public class Panel extends JPanel implements ActionListener{
 			
 			for(int i=1;i<=snake_2.getSnake().size()-1;i++) {
 				if(head_2.x==snake_2.getSnake().get(i).x && head_2.y==snake_2.getSnake().get(i).y) {
-					setGameOver(true);
+					setGameState(GameState.GAMEOVER);
 					return true;
 				}
 			}
 			
 			/**
-			 * collison between player 1 and player 2
+			 * collison between player 1 and player 2 initiated by player 1
 			 */
 		
 			
 			for(int i=0;i<snake_2.getSnake().size()-1;i++) {
 				if(head.x==snake_2.getSnake().get(i).x && head.y==snake_2.getSnake().get(i).y ) {
-					setGameOver(true);
+					setGameState(GameState.GAMEOVER);
 					return true;
 				}
 			}
 			
 			/**
-			 * collision between player 2 an player 1
+			 * collision between player 2 an player 1 initiated by player 2
 			 */
 			
 			for(int i=0;i<snake.getSnake().size();i++) {
 				if(head_2.x==snake.getSnake().get(i).x && head_2.y==snake.getSnake().get(i).y ) {
-					setGameOver(true);
+					setGameState(GameState.GAMEOVER);
 					return true;
 				}
 			}
@@ -528,5 +557,3 @@ public class Panel extends JPanel implements ActionListener{
 	}
 	
 }
-	
-
