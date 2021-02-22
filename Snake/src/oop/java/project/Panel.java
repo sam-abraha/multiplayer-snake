@@ -14,6 +14,8 @@ import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,22 +30,6 @@ import javax.swing.Timer;
 import java.awt.Rectangle;
 import java.awt.Shape;
 
-/**
- * @author Lucas
- *
- */
-/**
- * @author Lucas
- *
- */
-/**
- * @author Lucas
- *
- */
-/**
- * @author Lucas
- *
- */
 public class Panel extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
@@ -52,10 +38,10 @@ public class Panel extends JPanel implements ActionListener{
 	private Snake snake_2;
 	private Apple apple;
 	
+	private Graphics g;
+	
 	private JButton sp_button;
 	private JButton mp_button;
-	private JButton ai_button;
-	private JButton localmp_button;
 	
 	private static final Color NEON_GREEN = new Color(102,255,102);
 	private static final Color PURPLE = new Color(106,13,173);
@@ -74,22 +60,13 @@ public class Panel extends JPanel implements ActionListener{
 		
 		
 		snake=new Snake(Commons.WIDTH/2,(Commons.HEIGHT/2)-Commons.SIZE*12);
-		snake_2=new Snake(Commons.WIDTH/2,(Commons.HEIGHT/2)+Commons.SIZE*12); // set non existing position in case singleplayer is chosen
+		snake_2=new Snake(Commons.WIDTH/2,(Commons.HEIGHT/2)+Commons.SIZE*12);
 		apple=new Apple(Commons.WIDTH/2,Commons.HEIGHT/2);
-		
-		/*
-		obstacles = new ArrayList<Obstacle>();
-		for(int i=0;i<20;i++) { 
-			obstacles.add(new Obstacle((int)Math.random()/20*20,(int)Math.random()/20*20));
-		}
-		*/
 		
 		sp_button=new JButton();  
 		sp_button.setVisible(false);  // set Button invisible since its only used in the menu
 		mp_button=new JButton();
 		mp_button.setVisible(false);  // set Button invisible since its only used in the menu
-		localmp_button=new JButton();
-		ai_button=new JButton();
 		
 		
 		
@@ -179,7 +156,7 @@ public class Panel extends JPanel implements ActionListener{
 	
 
 	/**
-	 *  paint our images onto the panel
+	 *  paints images onto the panel
 	 */
 	
 	public void paintComponent(Graphics g) {
@@ -199,12 +176,12 @@ public class Panel extends JPanel implements ActionListener{
 
 				
 				g.setColor(Color.WHITE);
-				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
+				g.setFont(new Font("Ink Free",Font.BOLD, 30)); 
 				g.drawString("SNAKE", (Commons.getWidth()/2)-3*Commons.getSize(), (Commons.getHeight()/2)-6*Commons.getSize());
-				g.setFont(new Font("Monaco",Font.BOLD, 20));
-				g.drawString("made by lucas & sam",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
+				g.setFont(new Font("Ink Free",Font.BOLD, 20));
+				g.drawString("made by ...",(Commons.getWidth()/2)-Commons.getSize()*6,(Commons.getHeight()/2)-3*Commons.getSize());	
 				g.setColor(Color.RED);
-				g.setFont(new Font("Monaco",Font.BOLD, 30));
+				g.setFont(new Font("Ink Free",Font.BOLD, 30));
 				g.drawString("PRESS SPACE TO START",(Commons.getWidth()/2)-9*Commons.getSize(), (Commons.getHeight()/2)+Commons.getSize()*4);
 				
 					
@@ -221,13 +198,12 @@ public class Panel extends JPanel implements ActionListener{
 				  }
 
 				
-				
 				/**
 				 * enable choosing  singleplayer or  multiplayer in a menu
 				 */
 				
 				g.setColor(Color.RED);
-				g.setFont(new Font("Monaco",Font.BOLD, 30)); 
+				g.setFont(new Font("Ink Free",Font.BOLD, 30)); 
 				g.drawString("CHOOSE A GAME MODE", 125, 100);
 				
 				this.add(sp_button);  // add singleplayer button
@@ -259,7 +235,7 @@ public class Panel extends JPanel implements ActionListener{
 				 */
 				
 				if(getGameMode()==1) {
-					setBackground(NEON_GREEN);
+					setBackground(Color.lightGray);
 				}
 				else
 				{
@@ -298,7 +274,7 @@ public class Panel extends JPanel implements ActionListener{
 					g2d.fill(rect);
 				
 				g.setColor(Color.black);
-				g.setFont(new Font("TimesRoman",Font.BOLD | Font.ITALIC,15));
+				g.setFont(new Font("Ink Free",Font.BOLD | Font.ITALIC,15));
 				g.drawString("SCORE :  " + snake.getScore(),25,15);
 				
 				
@@ -307,7 +283,7 @@ public class Panel extends JPanel implements ActionListener{
 					for(Rectangle rect : snake_2.getSnake())
 						g2d.fill(rect);
 					
-					g.setFont(new Font("Monaco",Font.BOLD | Font.ITALIC,15));
+					g.setFont(new Font("Ink Free",Font.BOLD | Font.ITALIC,15));
 					g.drawString("SCORE :  " + snake_2.getScore(),Commons.getWidth()-Commons.getSize()*5,15);
 					
 				}
@@ -329,16 +305,16 @@ public class Panel extends JPanel implements ActionListener{
              */
 			
 			g.setColor(Color.RED);
-			g.setFont(new Font("Monaco",Font.BOLD,50));
+			g.setFont(new Font("Ink Free",Font.BOLD,50));
 			g.drawString("GAME OVER",150,200);
 	
 			
-			g.setFont(new Font("Monaco",Font.BOLD,20));
+			g.setFont(new Font("Ink Free",Font.BOLD,20));
 			g.drawString("PRESS ESC TO CLOSE", 200,500);
 			
 			if(getGameMode()==1) {
 				
-				g.setFont(new Font("Monaco",Font.BOLD,30));
+				g.setFont(new Font("Ink Free",Font.BOLD,30));
 				g.setColor(Color.WHITE);
 				g.drawString("Your Score : " + snake.getScore(), 200, 260);
 				
@@ -347,7 +323,7 @@ public class Panel extends JPanel implements ActionListener{
 			 
 			else {
 				
-				g.setFont(new Font("Monaco",Font.BOLD,30));
+				g.setFont(new Font("Ink Free",Font.BOLD,30));
 				g.setColor(Color.WHITE);
 				g.drawString("P1 Score : " + snake.getScore(), 200, 260);
 				
@@ -355,7 +331,7 @@ public class Panel extends JPanel implements ActionListener{
 				g.drawString("P2 Score : " + snake_2.getScore(), 200, 300);
 				
 				g.setColor(Color.RED);
-				g.setFont(new Font("Monaco",Font.BOLD,50));
+				g.setFont(new Font("Ink Free",Font.BOLD,50));
 				
 				if(snake.getScore()>snake_2.getScore()) {
 					
@@ -555,5 +531,14 @@ public class Panel extends JPanel implements ActionListener{
 		
 		return false;
 	}
+
+	
+	
+	
+	
+	
+	
+
+	
 	
 }
