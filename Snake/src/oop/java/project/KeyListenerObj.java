@@ -8,19 +8,19 @@ import java.awt.event.KeyListener;
 
 public class KeyListenerObj implements KeyListener{
 	
-	private Panel panel;
+	private Panel game;
 	
 	/**
 	 * @param panel
 	 * takes our panel as an arguments in order to add a KeyListener to our panel inside the panel class
 	 */
-	public KeyListenerObj(Panel panel) {
-		this.panel=panel;
+	public KeyListenerObj(Panel game) {
+		this.game=game;
 	}
 	
 	
 	/**
-	 *  enables key events when keys are pressed
+	 *  enables key events for every individual key used in game when key is pressed
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -34,48 +34,49 @@ public class KeyListenerObj implements KeyListener{
 	    switch(keyCode) { 
 	    
 	        case KeyEvent.VK_UP:
-	        	if(panel.isRunning() && panel.getSnake().getDirection()!=Direction.DOWN)
-		        	panel.getSnake().setDirection(Direction.UP);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake().getDirection()!=Direction.DOWN)
+		        	game.getSnake().setDirection(Direction.UP);
 	            break;
 	            
 	        case KeyEvent.VK_DOWN:
-	        	if(panel.isRunning() && panel.getSnake().getDirection()!=Direction.UP)
-	        		panel.getSnake().setDirection(Direction.DOWN);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake().getDirection()!=Direction.UP)
+	        		game.getSnake().setDirection(Direction.DOWN);
 	            break;
 	            
 	        case KeyEvent.VK_LEFT:
-	        	if(panel.isRunning() && panel.getSnake().getDirection()!=Direction.RIGHT)
-	        		panel.getSnake().setDirection(Direction.LEFT);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake().getDirection()!=Direction.RIGHT)
+	        		game.getSnake().setDirection(Direction.LEFT);
 	            break;
 	            
 	        case KeyEvent.VK_RIGHT:
-	        	if(panel.isRunning() && panel.getSnake().getDirection()!=Direction.LEFT)
-	        		panel.getSnake().setDirection(Direction.RIGHT);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake().getDirection()!=Direction.LEFT)
+	        		game.getSnake().setDirection(Direction.RIGHT);
 	            break;
 	            
 	        case KeyEvent.VK_W:
-	        	if(panel.isRunning() && panel.getSnake_2().getDirection()!=Direction.DOWN)
-	        		panel.getSnake_2().setDirection(Direction.UP);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake_2().getDirection()!=Direction.DOWN)
+	        		game.getSnake_2().setDirection(Direction.UP);
 	        	break;
 	        	
 	        case KeyEvent.VK_A:
-	        	if(panel.isRunning() && panel.getSnake_2().getDirection()!=Direction.RIGHT)
-	        		panel.getSnake_2().setDirection(Direction.LEFT);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake_2().getDirection()!=Direction.RIGHT)
+	        		game.getSnake_2().setDirection(Direction.LEFT);
 	        	break;
 	        	
 	        case KeyEvent.VK_S:
-	        	if(panel.isRunning() && panel.getSnake_2().getDirection()!=Direction.UP)
-	        		panel.getSnake_2().setDirection(Direction.DOWN);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake_2().getDirection()!=Direction.UP)
+	        		game.getSnake_2().setDirection(Direction.DOWN);
 	        	break;
 	        	
 	        case KeyEvent.VK_D:
-	        	if(panel.isRunning() && panel.getSnake_2().getDirection()!=Direction.LEFT)
-	        		panel.getSnake_2().setDirection(Direction.RIGHT);
+	        	if(game.getGameState()==GameState.RUNNING && game.getSnake_2().getDirection()!=Direction.LEFT)
+	        		game.getSnake_2().setDirection(Direction.RIGHT);
 	        	break;
 	            
 	        case KeyEvent.VK_SPACE :
-	        	if(panel.isStart())
-	        		panel.setMenu(true);
+	        	if(game.getGameState()==GameState.START) {
+	        		game.setGameState(GameState.MENU);
+	        	}
 	        	break;
 	        	
 	        
