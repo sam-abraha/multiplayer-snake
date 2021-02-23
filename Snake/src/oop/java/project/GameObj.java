@@ -5,10 +5,6 @@ public class GameObj {
 	private int xPos;
 	private int yPos;
 	
-	public GameObj() {
-		xPos=yPos=0;
-	}
-	
 	public GameObj(int xPos,int yPos) {
 		this.xPos=xPos;
 		this.yPos=yPos;

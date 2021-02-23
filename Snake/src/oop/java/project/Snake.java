@@ -5,21 +5,21 @@ package oop.java.project;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class Snake  extends GameObj{
+public class Snake {
 	
-	private Rectangle rect1;
+	private Rectangle head;
 	private ArrayList <Rectangle> snake;
 	private Direction direction;
 	private int score;
 	
-	public Snake(int x,int y) {
-		super(x,y);
+	public Snake(int xPos,int yPos) {
 		snake=new ArrayList<>();
-		rect1=new Rectangle(x,y,Commons.getSize(),Commons.getSize());
-		snake.add(rect1);
-		setDirection(null);
+		head=new Rectangle(xPos,yPos,Commons.getSize(),Commons.getSize());
+		snake.add(head);
+		setDirection(Direction.NOT_MOVING);
 		setScore(0);
 	}
+	
 
 	/**
 	 * @return snake 
@@ -35,11 +35,7 @@ public class Snake  extends GameObj{
 	 */
 	public void setSnake(ArrayList<Rectangle> snake) {
 		this.snake = snake;
-	}
-	
-	public int size() {
-		
-		return snake.size();
+
 	}
 
 	public Direction getDirection() {
@@ -50,11 +46,6 @@ public class Snake  extends GameObj{
 		this.direction = direction;
 	}
 	
-	
-	public void removeLast() {
-		snake.remove(size()-1);
-	}
-
 	public int getScore() {
 		return score;
 	}
@@ -62,14 +53,21 @@ public class Snake  extends GameObj{
 	public void setScore(int score) {
 		this.score = score;
 	}
+	
 
+	
+	/**
+	 * calls up,left,right,down function suitable to the direction and deletes last element in the list
+	 */
 	public void move() {
+	
 		
 		switch(getDirection()) {
 		
-		case UP : 
+		case UP :
 			this.up();
 			break;
+			
 		case RIGHT : 
 			this.right();;
 			break;
@@ -81,32 +79,48 @@ public class Snake  extends GameObj{
 		case DOWN : 
 			this.down();
 			break;
+		case NOT_MOVING:
+			break;
+		default:
+			break;
 		}
-		this.removeLast();
+		snake.remove(snake.size()-1);
 	}
+	
+	
 
+	/**
+	 *  adds a new rectangle to the end of the list suitable with the dircetion
+	 */
 	public void grow() {
 		
+		Rectangle last=snake.get(snake.size()-1); // last element in the array list
+		
 		switch(getDirection()) {
 		
 		case UP : 
-			this.up();
+			snake.add(new Rectangle(last.x,last.y-Commons.getSize(),Commons.getSize(),Commons.getSize()));
 			break;
 		case RIGHT : 
-			this.right();;
+			snake.add(new Rectangle(last.x+Commons.getSize(),last.y,Commons.getSize(),Commons.getSize()));
 			break;
 		
 		case LEFT: 
-			this.left();
+			snake.add(new Rectangle(last.x-Commons.getSize(),last.y,Commons.getSize(),Commons.getSize()));
 			break;
 			
 		case DOWN : 
-			this.down();
+			snake.add(new Rectangle(last.x,last.y+Commons.getSize(),Commons.getSize(),Commons.getSize()));
+			break;
+		default:
 			break;
 		}
 	}
 
-
+	
+	/**
+	 * creates a new rectangle when the desired direction is right and adds it to the list
+	 */
 	public void right() {
 		// TODO Auto-generated method stub
 		setDirection(Direction.RIGHT);
@@ -116,6 +130,9 @@ public class Snake  extends GameObj{
 	}
 
 
+	/**
+	 * creates a new rectangle when the desired direction is left and adds it to the list
+	 */
 	public void left() {
 		// TODO Auto-generated method stub
 		setDirection(Direction.LEFT);
@@ -125,6 +142,9 @@ public class Snake  extends GameObj{
 	}
 
 
+	/**
+	 * creates a new rectangle when the desired direction is down and adds it to the list
+	 */
 	public void down() {
 		// TODO Auto-generated method stub
 		setDirection(Direction.DOWN);
@@ -135,6 +155,9 @@ public class Snake  extends GameObj{
 	}
 
 
+	/**
+	 * creates a new rectangle when the desired direction is up and adds it to the list
+	 */
 	public void up() {
 		// TODO Auto-generated method stub
 		setDirection(Direction.UP);

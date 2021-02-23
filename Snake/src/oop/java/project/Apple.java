@@ -11,12 +11,13 @@ public class Apple extends GameObj {
 		super(x,y);
 	}
 
+	
 	/**
-	 * @return random position when apple is eaten by the snake
+	 * sets apple to a random positon
 	 */
 	public void setRandomPosition() {
 		Random x= new Random();
-		int xPos=x.nextInt(Commons.getHeight());   // apple needs to be a multiple of th cell size in order to fit
+		int xPos=x.nextInt(Commons.getHeight());   // apple needs to be a multiple of the cell size in order to fit
 		this.setxPos((xPos/Commons.getSize())*Commons.getSize());
 		
 		

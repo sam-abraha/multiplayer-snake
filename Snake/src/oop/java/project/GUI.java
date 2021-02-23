@@ -8,14 +8,15 @@ public class GUI extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 
-	
 	private static int HEIGHT=640;
 	private static int WIDTH=616;
+	
 	
 	public GUI() {
 		super();
 		init();
 	}
+	
 	
 	public void init() {
 		this.setTitle("Snake");
@@ -37,6 +38,7 @@ public class GUI extends JFrame {
 	    	}
 	    });
 	}
+	
 }
 	
 	     
